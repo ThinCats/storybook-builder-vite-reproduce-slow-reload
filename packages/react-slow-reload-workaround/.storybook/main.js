@@ -1,8 +1,7 @@
-const path = require('path')
+const path = require('path');
 
 const forceBundleConfigDeps = () => {
     const virtualFileId = '/virtual:/@storybook/builder-vite/vite-app.js';
-    const nodeModuleStr = 'node_modules/';
 
     return {
         name: 'force-bundle-config-dep',
@@ -15,16 +14,12 @@ const forceBundleConfigDeps = () => {
                 return;
             }
 
+            // match last node_modules
+            // .../node_modules/.../node_modules/yy/zz -> yy/zz
             const transformedCode = code.replace(
-                /import \* as (config_.*?) from '(.*?)'/g,
-                (substr, name, mpath) => {
-                    const idx = mpath.lastIndexOf(nodeModuleStr);
-                    if (idx !== -1) {
-                        return `import * as ${name} from '${mpath.slice(
-                            idx + nodeModuleStr.length
-                        )}'`;
-                    }
-                    return substr;
+                /import \* as (config_.*?) from '.*\/node_modules\/(.*?)'/g,
+                (_substr, name, mpath) => {
+                    return `import * as ${name} from '${mpath}'`;
                 }
             );
 
