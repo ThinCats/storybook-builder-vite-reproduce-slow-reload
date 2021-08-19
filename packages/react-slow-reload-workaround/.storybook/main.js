@@ -37,7 +37,7 @@ module.exports = {
         '../stories/**/*.stories.@(js|jsx|ts|tsx)',
     ],
     addons: [
-        // "@storybook/addon-a11y", // still breaks
+        '@storybook/addon-a11y', // it works now, without optimizeDeps.include (see issue https://github.com/eirslett/storybook-builder-vite/issues/6)
         '@storybook/addon-links',
         '@storybook/addon-essentials',
     ],
